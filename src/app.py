@@ -73,6 +73,10 @@ def signup_for_activity(activity_name: str, email: str, response: Response):
     if email in activity["participants"]:
         raise HTTPException(status_code=400, detail="Student already signed up")
 
+    # Validate activity is not at capacity
+    if len(activity["participants"]) >= activity["max_participants"]:
+        raise HTTPException(status_code=400, detail="Activity is at maximum capacity")
+
     # Add student
     activity["participants"].append(email)
     response.headers["Cache-Control"] = "no-store"
